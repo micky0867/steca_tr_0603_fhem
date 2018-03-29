@@ -195,7 +195,7 @@ sub steca_tr_Undef($$) {
   <ul> 
   <br>
   define logfile:<br>
-  define FileLog_steca FileLog ./log/steca-%Y-%m.log (.*)
+  define FileLog_steca FileLog ./log/steca-%Y-%m.log steca:.*
   </ul>
 =end html
 
@@ -204,7 +204,7 @@ sub steca_tr_Undef($$) {
   <ul> 
   <br>
   Logdatei anlegen:<br>
-  define FileLog_steca FileLog ./log/steca-%Y-%m.log (.*)
+  define FileLog_steca FileLog ./log/steca-%Y-%m.log steca:.*
   </ul>
 =end html
 
