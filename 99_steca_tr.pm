@@ -107,9 +107,13 @@ sub steca_tr_Ready($) {
   my $name = ${hash}->{NAME};
   
   Log3($hash->{NAME}, 5, "steca_tr_Ready");
-  delete($readyfnlist{"$name.$dev"});
-  DevIo_OpenDev($hash, 1, "steca_tr_DoInit");
-  return(1);
+  # delete($readyfnlist{"$name.$dev"});
+  DevIo_OpenDev($hash, 1, "steca_tr_DoInit") if($hash->{STATE} eq "disconnected");
+  if(defined($hash->{USBDev})) {
+    my $po = $hash->{USBDev};
+    my ( $BlockingFlags, $InBytes, $OutBytes, $ErrorFlags ) = $po->status;
+    return ( $InBytes > 0 );
+  }
 }
 
 sub steca_tr_Read($) {
@@ -117,8 +121,8 @@ sub steca_tr_Read($) {
   my $buf = "";
   my $cnt = 0;
   
-  $buf = DevIo_SimpleRead($hash);
-  return("") if(!defined($buf));
+  $buf = DevIo_TimeoutRead($hash, 0.1);
+  return("") if(!defined($buf) || $buf eq "");
   chomp($buf);
   Log3($hash->{NAME}, 5, "steca_tr_Read >" . $buf . "<");
   return("") if($buf eq "");
